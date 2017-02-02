@@ -1,15 +1,18 @@
-import React from "react"
+import React, { PropTypes } from "react"
 import { connect } from "react-redux"
+import { incrementAction, decrementAction } from "../../journalReducer"
 
 import Page from "../Page"
-import journal from "../../journalReducer"
 
 const Journal = (props) => {
-  console.log(props);
+  console.log('Journal props', props);
   return (
     <Page { ...props }>
       <div>
         <textarea />
+        <span>Counter value: {props.journal.journal}</span>
+        <button onClick={props.incrementAction}>+</button>
+        <button onClick={props.decrementAction}>-</button>
       </div>
     </Page>
   )
@@ -17,12 +20,19 @@ const Journal = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    todos: journal(state)
+    journal: state.journal
   }
 }
 
-const ConnectedJournal = connect(
-  mapStateToProps
-)(Journal)
+const mapDispatchToProps = {
+  incrementAction,
+  decrementAction
+}
 
-export default ConnectedJournal
+Journal.propTypes = {
+  journal: PropTypes.object,
+  incrementAction: PropTypes.func,
+  decrementAction: PropTypes.func,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Journal)

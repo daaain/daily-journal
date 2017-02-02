@@ -136,6 +136,8 @@
   },
   "dependencies": {
     "pouchdb": "^6.1.1",
-    "redux-pouchdb": "^0.1.1"
+    "redux-logger": "^2.8.1",
+    "redux-pouchdb": "^0.1.1",
+    "redux-thunk": "^2.2.0"
   }
 }
