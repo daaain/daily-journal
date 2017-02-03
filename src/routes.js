@@ -16,14 +16,24 @@ const PageContainer = (props) => (
       Page,
       PageError,
       Homepage,
-      Journal,
       Post,
     }}
   />
 )
 
+const isClient = typeof window !== 'undefined'
+let redirectToToday = null // set to null for static build only
+
+if (isClient) {
+ redirectToToday = (nextState, replace) => {
+   replace({ pathname: `/journal/11-11-11` })
+  }
+}
+
 export default (
   <Route component={ AppContainer }>
+    <Route path='/journal/' onEnter={ redirectToToday } />
+    <Route path='/journal/:date' component={ Journal } />
     <Route path="*" component={ PageContainer } />
   </Route>
 )

@@ -1,23 +1,42 @@
 import { persistentReducer } from 'redux-pouchdb';
 
-const INCREMENT = 'INCREMENT';
-const DECREMENT = 'DECREMENT';
+const USER_EDIT = 'USER_EDIT';
 
-export const incrementAction = () => ({
-  type: INCREMENT
+export const userEditAction = (text) => ({
+  type: USER_EDIT,
+  text: text
 })
 
-export const decrementAction = () => ({
-  type: DECREMENT
-})
+const TEMPLATE = `* Biggest wins
 
-const journal = (state = {journal: 0}, action) => {
-  console.log('journal state', state.journal);
+
+
+* Biggest lessons
+
+
+
+* Emotions / motivation
+
+
+
+* Feedback to anyone
+
+
+
+* Need help with
+
+
+
+* Everything else
+
+`;
+
+const journal = (state = {journal: TEMPLATE}, action) => {
   switch(action.type) {
-    case INCREMENT:
-      return { journal: state.journal + 1 };
-    case DECREMENT:
-      return { journal: state.journal - 1 };
+    case USER_EDIT:
+      return {
+        journal: action.text
+      };
     default:
       return state;
     }
