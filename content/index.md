@@ -1,44 +1,19 @@
 ---
-title: Phenomic base theme
+title: Daily journal
 layout: Homepage
 hero: https://farm4.staticflickr.com/3949/15589950511_3675b15e59_k.jpg
-# hero credit: https://www.flickr.com/photos/pslee999/15589950511/
-cta:
-  label: About this theme
-  link: "about"
 ---
 
-Hi there. Before having fun with Phenomic, be sure to read the documentation :
+Hey there,
 
-* [How to setup a new project with Phenomic](https://phenomic.io/docs/setup/)
-* [Getting Started with Phenomic](https://phenomic.io/docs/getting-started/)
-* [Usage & APIs](https://phenomic.io/docs/usage/)
-* [FAQ](https://phenomic.io/docs/faq/)
+Welcome to the Daily Journal app!
 
-Also take a look at
-[existing websites that use Phenomic](https://phenomic.io/showcase/),
-some projects share their source code!
+This is an experiment to help me keep up with my daily work journaling, but it’s of course open for anyone to use. Just press "Journal" in the top bar to start!
 
-<!-- demo to show you that you can use "assets" folder -->
-<small>
-  Built with
-  <a href="https://facebook.github.io/react/">
-    <img alt="" src="assets/react.svg" width="16" height="16" />
-    React
-  </a>.
-</small>
+As you start writing, your journal will be saved locally in your browser, so you can close the window and come back any time with everything saved.
 
----
+In case you want to back up your data (and settings), you can export everything into a file and import back later. I’m also planning to integrate with Dropbox to make this smoother and enable synchronisation between devices.
 
-You may want to take a look at the [404.html](/404.html) and tweak the render.
+This project is open source, hosted on Github:
 
-If you need to make adjustments, you can directly alter page layouts in
-``src/layouts/``;
-small things like the header, footer, buttons and so on can be changed in
-``src/components/``;
-and for colors and common CSS variables, you can modify ``postcss.config.js``.
-
-_You feel like the base theme is not enough or you just saw something wrong?_
-[Please help us make Phenomic better!](https://phenomic.io/contributing/)
-
----
+This live site is deployed using Netlify.
