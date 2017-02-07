@@ -15,9 +15,9 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  max-width: calc(var(--maxWidth) + (var(--nav-item-padding) * 2));
+  max-width: var(--maxWidth);
   margin: 0 auto;
-  padding: 0;
+  padding: 0 0.25rem;
   line-height: 3rem;
 }
 
@@ -37,11 +37,12 @@
   transition: 0.4s all;
   border-bottom: 1px solid transparent;
 
-  &:hover,
-  &:focus {
-    color: inherit;
-    opacity: 1;
-    border-bottom-color: var(--colorNeutralLight);
+  @media (hover: hover) {
+    &:hover {
+      color: inherit;
+      opacity: 1;
+      border-bottom-color: var(--colorNeutralLight);
+    }
   }
 }
 

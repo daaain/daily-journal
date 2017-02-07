@@ -1,36 +1,68 @@
 import React, { PropTypes } from "react"
 import Helmet from "react-helmet"
 import { connect } from "react-redux"
-import { userEditAction } from "../../journalReducer"
+import { Link } from "phenomic"
+import { Form, TextArea } from 'semantic-ui-react'
+
+import { userEditAction } from "../../reducers/journal"
+import JournalHeader from "../../components/JournalHeader"
 
 import styles from "./index.css"
 
+const TEMPLATE = `* Biggest wins
+
+
+
+* Biggest lessons
+
+
+
+* Emotions / motivation
+
+
+
+* Feedback to anyone
+
+
+
+* Need help with
+
+
+
+* Everything else
+
+`;
+
 const Journal = (props) => {
-  console.log('Journal props', props);
+  const date = new Date(props.params.date);
+  const yesterday = new Date(props.params.date);
+  yesterday.setDate(date.getDate() - 1);
+  const tomorrow = new Date(props.params.date);
+  tomorrow.setDate(date.getDate() + 1);
+
   function handleJournalTextEdit(event) {
-    props.userEditAction(event.target.value);
+    props.userEditAction(props.params.date, event.target.value);
   }
+
   return (
     <div className={ styles.page }>
       <Helmet
         title="Daily journal"
       />
-      <div
-        className={ styles.hero }
-        style={ { background: `#111 url(https://farm4.staticflickr.com/3949/15589950511_3675b15e59_k.jpg) 50% 50% / cover` } }
-      >
-        <div className={ styles.header }>
-          <div className={ styles.wrapper }>
-            <h1 className={ styles.heading }>{ `Daily journal – ${props.params.date}` }</h1>
-          </div>
+      <JournalHeader title={ `Daily journal – ${props.params.date}` }>
+        <div className={ styles.links }>
+          <Link className={ styles.link + " " + styles.left } to={`/journal/${yesterday.toISOString().substr(0, 10)}`}>↩	Back one day</Link>
+          <Link className={ styles.link + " " + styles.right } to={`/journal/${tomorrow.toISOString().substr(0, 10)}`}>Forward one day ↪</Link>
         </div>
-      </div>
+      </JournalHeader>
       <div className={ styles.wrapper }>
-        <textarea
-          className={ styles.journalInput }
-          onChange={ handleJournalTextEdit }
-          value={ props.journal.journal }
-        />
+        <Form>
+          <TextArea autoHeight
+            className={ styles.journalInput }
+            onChange={ handleJournalTextEdit }
+            value={ props.journal.journal[props.params.date] || TEMPLATE }
+          />
+        </Form>
       </div>
     </div>
   )

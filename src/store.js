@@ -1,15 +1,14 @@
-import { compose, combineReducers, applyMiddleware } from "redux"
+import { compose, applyMiddleware } from "redux"
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 
-import PouchDB from "pouchdb"
+import { isClient } from "./helpers/env"
+import { database } from "./helpers/pouch"
 import { persistentStore } from "redux-pouchdb"
 import createStore from "phenomic/lib/redux/createStore"
-// eslint-disable-next-line import/no-namespace
-import * as phenomicReducers from "phenomic/lib/redux/modules"
-import journal from "./journalReducer"
 
-const db = new PouchDB('journal');
+import rootReducer from './reducers/index';
+
 const loggerMiddleware = createLogger();
 
 const applyMiddlewares = applyMiddleware(
@@ -19,12 +18,20 @@ const applyMiddlewares = applyMiddleware(
 
 const createStoreWithMiddleware = compose(
   applyMiddlewares,
-  persistentStore(db)
+  persistentStore(database)
 )(createStore);
 
 const store = createStoreWithMiddleware(
-  combineReducers({...phenomicReducers, journal}),
-  { ...(typeof window !== "undefined") && window.__INITIAL_STATE__ },
+  rootReducer,
+  { ...isClient && window.__INITIAL_STATE__ },
 )
+
+if (isClient && module.hot) {
+  // Enable Webpack hot module replacement for reducers
+  module.hot.accept('./reducers/index', () => {
+    const nextRootReducer = require('./reducers/index').default;
+    store.replaceReducer(nextRootReducer);
+  });
+}
 
 export default store

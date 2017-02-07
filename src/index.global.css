@@ -1,5 +1,25 @@
 /* Using global sytles is not recommended, prefer local styles via CSS Modules */
 
+@import "../semantic/dist/components/button.css";
+@import "../semantic/dist/components/icon.css";
+@import "../semantic/dist/components/dimmer.css";
+@import "../semantic/dist/components/modal.css";
+@import "../semantic/dist/components/header.css";
+@import "../semantic/dist/components/card.css";
+@import "../semantic/dist/components/list.css";
+@import "../semantic/dist/components/item.css";
+@import "../semantic/dist/components/input.css";
+
+@font-face {
+  font-family: 'Icons';
+  src: url("/assets/icons.woff2") format('woff2'), url("/assets/icons.woff") format('woff');
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-decoration: inherit;
+  text-transform: none;
+}
+
 /*
  * box model like it should be
  *
