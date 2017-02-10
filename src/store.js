@@ -4,7 +4,7 @@ import createLogger from 'redux-logger';
 
 import { isClient } from "./helpers/env"
 import { database } from "./helpers/pouch"
-import { persistentStore } from "redux-pouchdb"
+import { persistentStore } from "redux-pouchdb-plus"
 import createStore from "phenomic/lib/redux/createStore"
 
 import rootReducer from './reducers/index';
@@ -18,12 +18,12 @@ const applyMiddlewares = applyMiddleware(
 
 const createStoreWithMiddleware = compose(
   applyMiddlewares,
-  persistentStore(database)
+  persistentStore({db: database})
 )(createStore);
 
 const store = createStoreWithMiddleware(
   rootReducer,
-  { ...isClient && window.__INITIAL_STATE__ },
+  { ...(isClient && window.__INITIAL_STATE__) },
 )
 
 if (isClient && module.hot) {

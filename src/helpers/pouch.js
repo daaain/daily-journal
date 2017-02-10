@@ -2,6 +2,7 @@ import PouchDB from "pouchdb"
 
 import { isClient } from "./env"
 import replicationStream from "pouchdb-replication-stream"
+import databaseLoadPlugin from "pouchdb-load"
 import memoryAdapter from "pouchdb-adapter-memory"
 import MemoryStream from "memorystream"
 import FileSaver from "file-saver"
@@ -15,8 +16,23 @@ if (!isClient) {
 
 export const database = new PouchDB(...pouchInitArgs);
 
+if (isClient) {
+  // needed for PouchDB Inspector Chrome extension
+  window.PouchDB = PouchDB;
+}
+
 export function destroyDatabase() {
   database.destroy();
+  window.location.reload();
+}
+
+export function importDatabase(jsonData) {
+  PouchDB.plugin(databaseLoadPlugin);
+  database.load(jsonData).then(function () {
+    console.log('PouchDB import successful!');
+  }).catch(function (err) {
+    console.error('PouchDB import error:', err);
+  });
 }
 
 export function dumpDatabase() {
@@ -31,8 +47,8 @@ export function dumpDatabase() {
 
   database.dump(stream).then(function () {
     const blob = new Blob([dumpedString], {type: "application/json;charset=utf-8"});
-    FileSaver.saveAs(blob, "journal_db.json");
+    FileSaver.saveAs(blob, `journal_db-${new Date().toISOString()}.json`);
   }).catch(function (err) {
-    console.log('PouchDB dump error:', err);
+    console.error('PouchDB dump error:', err);
   });
 }

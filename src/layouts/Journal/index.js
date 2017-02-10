@@ -1,55 +1,33 @@
 import React, { PropTypes } from "react"
 import Helmet from "react-helmet"
+import { Map } from 'immutable';
 import { connect } from "react-redux"
 import { Link } from "phenomic"
-import { Form, TextArea } from 'semantic-ui-react'
+import { Form, Input, TextArea } from 'semantic-ui-react'
 
-import { userEditAction } from "../../reducers/journal"
+import { journalQuestionEditAction, journalAnswerEditAction } from "../../reducers/journal"
 import JournalHeader from "../../components/JournalHeader"
 
 import styles from "./index.css"
 
-const TEMPLATE = `* Biggest wins
-
-
-
-* Biggest lessons
-
-
-
-* Emotions / motivation
-
-
-
-* Feedback to anyone
-
-
-
-* Need help with
-
-
-
-* Everything else
-
-`;
-
 const Journal = (props) => {
-  const date = new Date(props.params.date);
-  const yesterday = new Date(props.params.date);
+  const dateString = props.params.date;
+  const date = new Date(dateString);
+  const yesterday = new Date(dateString);
   yesterday.setDate(date.getDate() - 1);
-  const tomorrow = new Date(props.params.date);
+  const tomorrow = new Date(dateString);
   tomorrow.setDate(date.getDate() + 1);
 
-  function handleJournalTextEdit(event) {
-    props.userEditAction(props.params.date, event.target.value);
-  }
+  const journal = props.journal.get('journal');
+  const entry = journal.get(dateString);
+  const questions = Map.isMap(entry) ? entry.get('questions') : props.journal.get('questions');
 
   return (
     <div className={ styles.page }>
       <Helmet
         title="Daily journal"
       />
-      <JournalHeader title={ `Daily journal – ${props.params.date}` }>
+      <JournalHeader title={ `Daily journal – ${dateString}` }>
         <div className={ styles.links }>
           <Link className={ styles.link + " " + styles.left } to={`/journal/${yesterday.toISOString().substr(0, 10)}`}>↩	Back one day</Link>
           <Link className={ styles.link + " " + styles.right } to={`/journal/${tomorrow.toISOString().substr(0, 10)}`}>Forward one day ↪</Link>
@@ -57,11 +35,21 @@ const Journal = (props) => {
       </JournalHeader>
       <div className={ styles.wrapper }>
         <Form>
-          <TextArea autoHeight
-            className={ styles.journalInput }
-            onChange={ handleJournalTextEdit }
-            value={ props.journal.journal[props.params.date] || TEMPLATE }
-          />
+          {
+            questions.map((question, index) => ([
+              <Input
+                key={ index }
+                fluid
+                value={ question }
+                onChange={ (event) => { props.journalQuestionEditAction(dateString, event.target.value, index) } }
+              />,
+              <TextArea autoHeight
+                className={ styles.journalInput }
+                onChange={ (event) => { props.journalAnswerEditAction(dateString, event.target.value, index) } }
+                value={ Map.isMap(entry) ? entry.get('answers').get(index) : '' }
+              />
+            ]))
+          }
         </Form>
       </div>
     </div>
@@ -75,7 +63,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  userEditAction
+  journalQuestionEditAction,
+  journalAnswerEditAction
 }
 
 Journal.propTypes = {

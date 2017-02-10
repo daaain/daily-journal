@@ -51,3 +51,9 @@
   max-width: var(--maxWidth);
   padding: 1.5rem 0.75rem 0;
 }
+
+.dropzone {
+  border: 2px dashed var(--colorPrimaryDark);
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+}
